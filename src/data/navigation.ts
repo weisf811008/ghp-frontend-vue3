@@ -66,24 +66,6 @@ export const navItems = [
       },
     ],
   },
-  // {
-  //   title: '統計圖表',
-  //   icon: 'mdi-chart-pie',
-  //   children: [
-  //     {
-  //       title: '檢核大項缺失次數',
-  //       to: '/dashboard/abnormalCategories',
-  //     },
-  //     {
-  //       title: '檢核大項合格次數',
-  //       to: '/dashboard/normalCategories',
-  //     },
-  //     {
-  //       title: '檢核細項十大缺失',
-  //       to: '/dashboard/abnormalItems',
-  //     },
-  //   ],
-  // },
   {
     title: '學校帳號管理',
     icon: 'mdi-account-multiple',
