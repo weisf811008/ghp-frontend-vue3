@@ -50,7 +50,7 @@
             variant="outlined"
             border
           >
-            {{ user.username }}
+            {{ user?.username }}
           </v-btn>
         </template>
         <v-list density="compact" min-width="0">
@@ -68,13 +68,16 @@
 </template>
 <script setup>
   import { ref, computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useDisplay } from 'vuetify'
   import { storeToRefs } from 'pinia'
   import { navItems } from '@/data/navigation'
+
+  // stores
   import { useAuthStore } from '@/stores/auth'
 
   const route = useRoute()
+  const router = useRouter()
   const authStore = useAuthStore()
   const { lgAndUp } = useDisplay()
 
