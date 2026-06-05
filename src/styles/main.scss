@@ -1,0 +1,14 @@
+@layer vuetify-overrides {
+  code,
+  pre,
+  .v-code {
+    font-family: var(--v-font-mono);
+  }
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
