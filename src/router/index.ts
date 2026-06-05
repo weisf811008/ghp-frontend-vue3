@@ -49,31 +49,31 @@ const router = createRouter({
             },
           ],
         },
-        {
-          path: 'dashboard',
-          children: [
-            {
-              path: 'abnormalCategories',
-              name: 'AbnormalCategories',
-              meta: { title: '檢核大項缺失次數' },
-              component: () =>
-                import('../pages/dashboard/AbnormalCategories.vue'),
-            },
-            {
-              path: 'normalCategories',
-              name: 'NormalCategories',
-              meta: { title: '檢核大項合格次數' },
-              component: () =>
-                import('../pages/dashboard/NormalCategories.vue'),
-            },
-            {
-              path: 'abnormalItems',
-              name: 'AbnormalItems',
-              meta: { title: '檢核細項十大缺失' },
-              component: () => import('../pages/dashboard/AbnormalItems.vue'),
-            },
-          ],
-        },
+        // {
+        //   path: 'dashboard',
+        //   children: [
+        //     {
+        //       path: 'abnormalCategories',
+        //       name: 'AbnormalCategories',
+        //       meta: { title: '檢核大項缺失次數' },
+        //       component: () =>
+        //         import('../pages/dashboard/AbnormalCategories.vue'),
+        //     },
+        //     {
+        //       path: 'normalCategories',
+        //       name: 'NormalCategories',
+        //       meta: { title: '檢核大項合格次數' },
+        //       component: () =>
+        //         import('../pages/dashboard/NormalCategories.vue'),
+        //     },
+        //     {
+        //       path: 'abnormalItems',
+        //       name: 'AbnormalItems',
+        //       meta: { title: '檢核細項十大缺失' },
+        //       component: () => import('../pages/dashboard/AbnormalItems.vue'),
+        //     },
+        //   ],
+        // },
         {
           path: 'reports',
           children: [
