@@ -16,5 +16,6 @@ export const uploadInspection = (data: object) =>
   axios.post(`${resource}/files`, data)
 
 //取得一個已上傳的檔案
-export const getFileByFilename = (filename: string) =>
-  axios.get(`${resource}/files/${filename}`, { responseType: 'blob' })
+const getFileByFilename = (filename: string) => {
+  window.open(`https://localhost:7074/api/${resource}/files/${filename}`)
+}
