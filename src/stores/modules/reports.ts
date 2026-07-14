@@ -17,9 +17,9 @@ export const useReportsStore = defineStore('reports', () => {
   })
   const ghps = ref([])
   const visitings = ref([])
-  const prodTemps = ref({})
-  const tnhs = ref({})
-  const tablewares = ref({})
+  const prodTemps = ref<{ rows: any[]; abnormalRows: any[] }>({ rows: [], abnormalRows: [] })
+  const tnhs = ref<{ rows: any[]; abnormalRows: any[] }>({ rows: [], abnormalRows: [] })
+  const tablewares = ref<{ rows: any[]; abnormalRows: any[] }>({ rows: [], abnormalRows: [] })
 
   const fetchDaily = async (start: string, end: string) => {
     try {
