@@ -48,7 +48,7 @@
               >
                 <v-img
                   v-if="file.mimetype?.startsWith('image/')"
-                  :src="`/api/inspections/files/${file.filename}`"
+                  :src="`https://localhost:7074/api/inspections/files/${file.filename}`"
                   width="80"
                   height="80"
                   cover
@@ -102,8 +102,9 @@
   }
 
   const downloadFile = (file: any) => {
-    inspectionsStore.getUploadFileByFilename(file.filename, file.originalname)
+  window.open(`https://localhost:7074/api/inspections/files/${file.filename}`)
   }
+
 </script>
 
 <style lang="scss" scoped></style>
