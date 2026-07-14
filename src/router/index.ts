@@ -158,21 +158,15 @@ const router = createRouter({
 
 const publics = ['Login']
 
-router.beforeEach(async (to, from) => {
-  const authRequired = !publics.includes(to.name as string)
+router.beforeEach((to, from) => {
   const authStore = useAuthStore()
+  const isPublicPage = to.name === 'Login'
 
-  try {
-    if (authRequired && !authStore.user) {
-      await authStore.getUser()
-    }
-  } catch (e) {}
-
-  if (authRequired && !(authStore.user && authStore.user.username)) {
-    authStore.setReturnUrl(to.fullPath)
+  if (!isPublicPage && !authStore.isLoggedIn) {
     return { name: 'Login' }
+  } else if (isPublicPage && authStore.isLoggedIn) {
+    return { name: 'Home' }
   }
-  return true
 })
 
 export default router

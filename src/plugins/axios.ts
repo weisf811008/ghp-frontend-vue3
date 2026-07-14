@@ -2,9 +2,16 @@ import axios from 'axios'
 import router from '@/router'
 
 const instance = axios.create({
-  baseURL: '/api',
-  maxRedirects: 5,
-  withCredentials: true,
+  baseURL: 'https://localhost:7074/api',
+})
+
+// 每次請求自動帶 JWT Token
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 instance.interceptors.response.use(
@@ -20,6 +27,8 @@ instance.interceptors.response.use(
             break
           case 401:
             snackbarStore.showMessage('請重新登入', 'error')
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
             if (router.currentRoute.value.name !== 'Login') {
               router.push({ name: 'Login' })
             }
@@ -27,10 +36,13 @@ instance.interceptors.response.use(
           case 403:
             snackbarStore.showMessage('沒有存取權限', 'error')
             break
+          case 409:
+            snackbarStore.showMessage(err.response.data.message, 'error')
+            break
           case 422:
             snackbarStore.showMessage(
               err.response.data.errors
-                ?.map((e) => `${e.param}${e.msg}`)
+                ?.map((e: any) => `${e.field}${e.message}`)
                 .join('、') ?? '格式錯誤',
               'error',
             )

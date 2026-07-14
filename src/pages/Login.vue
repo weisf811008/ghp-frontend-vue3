@@ -32,7 +32,7 @@
           block
           class="mt-2"
           color="primary"
-          :loading="authStore.isLoading"
+          :loading="isLoggingIn"
           size="large"
           type="submit"
           variant="tonal"
@@ -47,10 +47,13 @@
   import { reactive, ref } from 'vue'
   import { useAuthStore } from '@/stores/auth.ts'
   import { useSnackbarStore } from '@/stores/snackbar.ts'
+  import {userRouter} from 'vue-router'
 
   const authStore = useAuthStore()
   const snackbarStore = useSnackbarStore()
+  const router = userRouter()
   const visible = ref(false)
+  const isLoggingIn = ref(false)
 
   const loginData = reactive({
     username: '',
@@ -62,23 +65,23 @@
   const passwordRules = [(value) => !!value || '密碼為必填欄位']
 
   async function handleLogin() {
-    if (!loginData.username || !loginData.password) return
-
-    try {
-      await authStore.login({
-        username: loginData.username,
-        password: loginData.password,
-      })
-      snackbarStore.showMessage('登入成功')
-    } catch (error) {
-      console.error('登入失敗', error)
+  if (!loginData.username || !loginData.password) return
+  try {
+    isLoggingIn.value = true
+    await authStore.login(loginData.username, loginData.password)
+    snackbarStore.showMessage('登入成功')
+    router.push({ name: 'Home' })
+  } catch (error) {
+    console.error('登入失敗', error)
       const errorMsg =
         error.response?.data.message || '登入失敗，請檢查帳號密碼'
 
       snackbarStore.showMessage(errorMsg, 'error')
-      
-    }
+  } finally {
+    isLoggingIn.value = false
   }
+}
+
 </script>
 
 <style lang="scss" scoped>

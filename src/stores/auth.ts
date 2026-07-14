@@ -1,72 +1,47 @@
-import axios from '@/plugins/axios'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import router from '@/router'
-
-import { loginUser, getUserInfo, logoutUser } from '@/api/auth'
-
-export interface User {
-  id: string | number
-  username: string
-}
-
-export interface LoginCredential {
-  username?: string
-  password?: string
-}
+import api from '@/plugins/axios'
 
 export const useAuthStore = defineStore('auth', () => {
-  const isLoading = ref(false)
-  const user = ref<User | null>(null)
-  const returnUrl = ref<string | null>(null)
+  // State
+  const token = ref<string | null>(localStorage.getItem('token'))
+  const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 
-  // 帳號登入
-  const login = async (credential: LoginCredential) => {
-    try {
-      isLoading.value = true
-      const res = await loginUser(credential)
-      user.value = res.data
-      const redirect = returnUrl.value || 'home'
-      returnUrl.value = null
-      router.push(redirect)
-    } finally {
-      isLoading.value = false
-    }
+  // Getters
+  const isLoggedIn = computed(() => !!token.value)
+  const schoolId = computed(() => user.value?.schoolId)
+  const roles = computed(() => user.value?.roles || [])
+
+  // Actions
+  async function login(username: string, password: string) {
+    const { data } = await api.post('/auth/login', { username, password })
+    token.value = data.token
+    user.value = data.user
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
   }
 
-  // 帳號登出
-  const logout = async () => {
-    try {
-      isLoading.value = true
-      await logoutUser()
-      user.value = null
-    } finally {
-      isLoading.value = false
-    }
+  function logout() {
+    token.value = null
+    user.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
   }
 
-  // 取得當前登入使用者資訊
-  const getUser = async () => {
-    try {
-      isLoading.value = true
-      const res = await getUserInfo()
-      user.value = res.data
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const setReturnUrl = (url: string) => {
-    returnUrl.value = url
+  async function fetchMe() {
+    const { data } = await api.get('/auth/me')
+    user.value = data
+    localStorage.setItem('user', JSON.stringify(data))
   }
 
   return {
-    isLoading,
+    token,
     user,
-    returnUrl,
+    isLoggedIn,
+    schoolId,
+    roles,
     login,
     logout,
-    getUser,
-    setReturnUrl,
+    fetchMe,
   }
 })
