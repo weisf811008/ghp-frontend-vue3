@@ -48,7 +48,7 @@
               >
                 <v-img
                   v-if="file.mimetype?.startsWith('image/')"
-                  :src="`https://localhost:7074/api/inspections/files/${file.filename}`"
+                  :src="blobUrls[file.filename]"
                   width="80"
                   height="80"
                   cover
@@ -76,7 +76,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, watch  } from 'vue'
+  import axios from '@/plugins/axios'
 
   //stores
   import { useInspectionsStore } from '@/stores/modules/inspections'
@@ -84,7 +85,7 @@
   // data
   import { inspectionDetailHeaders } from '@/data/tables/inspectionsDetail'
 
-  defineProps({
+  const props = defineProps({
     items: {
       type: Array,
       default: () => [],
@@ -92,6 +93,23 @@
   })
 
   const inspectionsStore = useInspectionsStore()
+  const blobUrls = ref<Record<string, string>>({})
+
+  // 當 items 有資料時，預先載入所有圖片
+  watch(() => props.items, async (newItems) => {
+    for (const item of newItems as any[]) {
+      for (const file of item.files ?? []) {
+        if (file.mimetype?.startsWith('image/') && !blobUrls.value[file.filename]) {
+          try {
+            const res = await axios.get(`/inspections/files/${file.filename}`, { responseType: 'blob' })
+            blobUrls.value[file.filename] = window.URL.createObjectURL(res.data)
+          } catch (error) {
+            console.log('error loading image', error)
+          }
+        }
+      }
+    }
+  }, { immediate: true })
 
   const getFileIcon = (mimetype: string) => {
     if (mimetype?.includes('word')) return 'mdi-file-word'
@@ -102,7 +120,7 @@
   }
 
   const downloadFile = (file: any) => {
-  window.open(`https://localhost:7074/api/inspections/files/${file.filename}`)
+    inspectionsStore.getUploadFileByFilename(file.filename, file.originalname)
   }
 
 </script>

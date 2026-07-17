@@ -47,11 +47,11 @@
   import { reactive, ref } from 'vue'
   import { useAuthStore } from '@/stores/auth.ts'
   import { useSnackbarStore } from '@/stores/snackbar.ts'
-  import {userRouter} from 'vue-router'
+  import {useRouter} from 'vue-router'
 
   const authStore = useAuthStore()
   const snackbarStore = useSnackbarStore()
-  const router = userRouter()
+  const router = useRouter()
   const visible = ref(false)
   const isLoggingIn = ref(false)
 

@@ -5,6 +5,7 @@ import {
   getInspectionById,
   createInspection,
   uploadInspection,
+  getFileByFilename,
 } from '@/api/inspections'
 
 interface Inspection {
@@ -77,8 +78,25 @@ export const useInspectionsStore = defineStore('inspections', () => {
     }
   }
 
-  const getUploadFileByFilename = (filename: string) => {
-  window.open(`https://localhost:7074/api/inspections/files/${filename}`)
+  const getUploadFileByFilename = async (filename: string, originalname: string) => {
+  try {
+    isLoading.value = true
+    const res = await getFileByFilename(filename)
+    const url = window.URL.createObjectURL(
+      new Blob([res.data], { type: res.headers['content-type'] })
+    )
+    const a = document.createElement('a')
+    a.href = url
+    a.download = originalname
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.log('error', error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
   return {
