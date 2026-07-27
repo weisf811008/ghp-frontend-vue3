@@ -28,17 +28,20 @@
   // stores
   import { useItemsStore } from '@/stores/modules/items'
   import { useSnackbarStore } from '@/stores/snackbar'
+  import { useCategoriesStore } from '@/stores/modules/categories'
 
   const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>(null)
 
   const itemsStore = useItemsStore()
   const snackbarStore = useSnackbarStore()
+  const categoriesStore = useCategoriesStore()
 
   const editDialogRef = ref<InstanceType<typeof ItemDialog> | null>(null)
   const searchText = ref('')
 
   onMounted(() => {
     itemsStore.fetchItems()
+    categoriesStore.fetchCategories()
   })
 
   const handleSearch = (value: string) => {

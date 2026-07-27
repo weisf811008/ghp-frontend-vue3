@@ -26,6 +26,9 @@
       {{ (page - 1) * itemsPerPage + index + 1 }}
     </template>
 
+    <template #item.category="{ item }">
+      {{ getCategoryName(item.categoryId) }}
+    </template>
     <template #item.regulations="{ item }">
       {{ item.regulations?.length ? item.regulations.join(', ') : '' }}
     </template>
@@ -57,6 +60,15 @@
 <script setup>
   import { ref } from 'vue'
   import { itemHeaders } from '@/data/tables/items'
+  import { useCategoriesStore } from '@/stores/modules/categories';
+
+  const categoriesStore = useCategoriesStore()
+
+  const getCategoryName = (categoryId) => {
+    const category = categoriesStore.categories.find(c=>c.id === categoryId)
+    console.log('category', category)
+    return category?.category ?? ""
+  }
 
   defineProps({
     items: {

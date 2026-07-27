@@ -26,8 +26,8 @@
                   v-for="item in items"
                   :key="item.id"
                   v-model="form.itemIds"
-                  :label="`[${item.category}]-${item.no}-${item.item}`"
-                  :value="item.id"
+                  :label="`[${getCategoryName(item.categoryId)}]-${item.no}-${item.item}`"
+                  :value="Number(item.id)"
                   density="compact"
                   hide-details
                 />
@@ -73,10 +73,12 @@
   import { useFormsStore } from '@/stores/modules/forms'
   import { useItemsStore } from '@/stores/modules/items'
   import { useSnackbarStore } from '@/stores/snackbar'
+  import { useCategoriesStore } from '@/stores/modules/categories'
 
   const formsStore = useFormsStore()
   const itemsStore = useItemsStore()
   const snackbarStore = useSnackbarStore()
+  const categoriesStore = useCategoriesStore()
   const { items } = storeToRefs(itemsStore)
 
   const dialog = ref(false)
@@ -101,11 +103,10 @@
   }
 
   const open = async (item = null) => {
-    await Promise.all([itemsStore.fetchItems()])
+    await Promise.all([itemsStore.fetchItems(), categoriesStore.fetchCategories()])
 
     resetForm()
     if (item) {
-      console.log('item', item)
       title.value = '編輯巡檢表單'
       isEdit.value = true
       editId.value = item.id
@@ -121,6 +122,11 @@
     }
     dialog.value = true
   }
+
+  const getCategoryName = (categoryId) => {
+    const category = categoriesStore.categories.find(c => c.id === categoryId)
+  return category?.category ?? ''
+}
 
   const handleSubmit = async () => {
     const { valid } = await formRef.value.validate()
