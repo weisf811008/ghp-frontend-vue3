@@ -5,21 +5,21 @@
         <v-card-text>
           <v-form ref="formRef" v-model="isFormValid">
             <div class="mb-3">
-              <label class="text-body-1 text-medium-emphasis">類別</label>
+              <label class="text-body-1 text-medium-emphasis">條文編號</label>
               <v-select
                 v-model="form.class"
                 :items="classItems"
-                :rules="[(v) => !!v || '類別為必填']"
+                :rules="[(v) => !!v || '條文編號為必填']"
                 variant="outlined"
               ></v-select>
             </div>
             <div>
-              <label class="text-body-1 text-medium-emphasis">類別序號</label>
+              <label class="text-body-1 text-medium-emphasis">條文類別</label>
               <v-text-field
                 v-model="form.code"
-                placeholder="請輸入類別序號"
+                placeholder="請輸入條文類別"
                 type="text"
-                :rules="[(v) => !!v || '類別序號為必填']"
+                :rules="[(v) => !!v || '條文類別為必填']"
                 variant="outlined"
               ></v-text-field>
             </div>
