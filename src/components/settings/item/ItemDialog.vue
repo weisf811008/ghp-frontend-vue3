@@ -58,7 +58,7 @@
                 v-model="form.regulations"
                 :items="regulations"
                 item-title="code"
-                item-value="id"
+                item-value="code"
                 :rules="[(v) => !!v || 'GHP條文為必填']"
                 variant="outlined"
                 multiple
@@ -70,7 +70,7 @@
                 v-model="form.visitingForms"
                 :items="visitingForms"
                 item-title="code"
-                item-value="id"
+                item-value="code"
                 :rules="[(v) => !!v || '訪視表為必填']"
                 variant="outlined"
                 multiple
@@ -196,12 +196,8 @@
       form.item = item.item
       form.period = item.period
       form.area = item.area
-      form.regulations = regulations.value
-        .filter((r) => item.regulations.includes(r.code))
-        .map((r) => r.id)
-      form.visitingForms = visitingForms.value
-        .filter((v) => item.visitingForms.includes(v.code))
-        .map((v) => v.id)
+      form.regulations = item.regulations
+      form.visitingForms = item.visitingForms
       form.needCheckValue = item.needCheckValue
       form.needDaily = item.needCheckValue
       isFormValid.value = true
