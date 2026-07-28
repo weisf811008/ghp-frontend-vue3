@@ -66,7 +66,6 @@
 
   const getCategoryName = (categoryId) => {
     const category = categoriesStore.categories.find(c=>c.id === categoryId)
-    console.log('category', category)
     return category?.category ?? ""
   }
 
