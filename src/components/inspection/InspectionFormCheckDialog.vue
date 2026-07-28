@@ -252,7 +252,7 @@
       await inspectionsStore.addInspection({
         date: new Date(date.value).toISOString(),
         formId: formStoreData.value.id,
-        details: detailsWithFiles,
+        details: detailsWithFiles.filter(d => d.status !== ''),
       })
 
       snackbarStore.showMessage('新增成功', 'success')
