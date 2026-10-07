@@ -19,7 +19,7 @@ interface Category {
 
 export const useCategoriesStore = defineStore('categories', () => {
   const categories = ref<Category[]>([])
-  const rategory = ref<Category | null>(null)
+  const crategory = ref<Category | null>(null)
   const isLoading = ref(false)
 
   const fetchCategories = async () => {
@@ -38,7 +38,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     try {
       isLoading.value = true
       const res = await getCategoryById(id)
-      rategory.value = res.data
+      crategory.value = res.data
     } catch (error) {
       console.log('error', error)
     } finally {
@@ -83,7 +83,7 @@ export const useCategoriesStore = defineStore('categories', () => {
   }
 
   return {
-    rategory,
+    crategory,
     categories,
     isLoading,
     fetchCategories,
